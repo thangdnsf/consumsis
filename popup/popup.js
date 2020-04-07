@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded',function(){
           bytes = parseInt(localStorage.getItem('total'));
           var text = convertB(bytes),
               textX = Math.round((width - ctx.measureText(text).width) / 2),
-              textY = height / 2 - 30;
+              textY = height / 2;
               textkwh = parseInt(localStorage.getItem('total')),
        
           ctx.fillText(text, textX, textY);
@@ -161,3 +161,4 @@ document.addEventListener('DOMContentLoaded',function(){
     document.getElementById('total').innerHTML = convertB(parseInt(localStorage.getItem('total')));
 })
 createInfoDevice();
+//hi Pratvi

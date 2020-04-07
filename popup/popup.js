@@ -20,35 +20,33 @@ convertB = (bytes) => {
         return (bytes*1e-9).toFixed(2).toString() + " GB"
 }
 
-convertKWh = (bytes) => {
-    return ((kWhPerByteDataCenter+kWhPerByteNetwork)*bytes).toFixed(2).toString()+" kWh";
+computeKWh = (byte) => {
+    return ((kWhPerByteDataCenter+kWhPerByteNetwork)*byte)
+}
+convertKWh = (byte) => {
+    return computeKWh(byte).toFixed(2).toString()+" kWh";
 }
 
-getInfoDevice = () => {
-    var obj = new Object();
-    $.getJSON('http://www.geoplugin.net/json.gp?jsoncallback=?', function(data) {
-        obj.IP = data.responseJSON["geobytesremoteip"];
-        obj.country =  data.responseJSON["geobytescountry"];
-        if (data.responseJSON["geobytesmapreference"] === "Europe "){
-            if (country === "France")
+createInfoDevice = () => {
+    $.getJSON('http://www.geoplugin.net/json.gp', function(data) {
+        var obj = new Object();
+        obj.IP = data['geoplugin_request'];
+        obj.country =  data["geoplugin_countryName"];
+        if (data["geoplugin_continentName"] === "Europe"){
+            if (obj.country === "France")
                 obj.GHG = 0.035;
             else{
                 obj.GHG = 0.276;
             }
         }
-        else if (country === "United States")
+        else if (obj.country === "United States")
             obj.GHG = 0.493;
-        else if (country === "China")
+        else if (obj.country === "China")
             obj.GHG = 0.681;
         else 
             obj.GHG = 0.519;
-        console.log(obj)
+        localStorage.setItem('device', JSON.stringify(obj));
     });
-    
-    console.log(obj)
-    
-    
-    return obj;
 };
 
 getTopDomain = ()=>{
@@ -76,11 +74,9 @@ getTopDomain = ()=>{
 }
 document.addEventListener('DOMContentLoaded',function(){
     //get information of device user
-    var device =getInfoDevice();
-    document.getElementById('ip').innerHTML = device.IP
-    document.getElementById('ctr').innerHTML = device.country
-    
-    
+    var device = JSON.parse(localStorage.getItem('device'));
+    document.getElementById('ip').innerHTML = device.IP;
+    document.getElementById('ctr').innerHTML = device.country;
 
     // draw chart
     var list = getTopDomain();
@@ -151,11 +147,12 @@ document.addEventListener('DOMContentLoaded',function(){
           bytes = parseInt(localStorage.getItem('total'));
           var text = convertB(bytes),
               textX = Math.round((width - ctx.measureText(text).width) / 2),
-              textY = height / 2;
+              textY = height / 2 - 30;
               textkwh = parseInt(localStorage.getItem('total')),
        
           ctx.fillText(text, textX, textY);
           ctx.fillText(convertKWh(bytes),textX,textY+40)
+          ctx.fillText((device.GHG*computeKWh(bytes)).toFixed(3).toString()+" kgCO2e",textX-20,textY+80)
           ctx.save();
         }
       });
@@ -163,3 +160,4 @@ document.addEventListener('DOMContentLoaded',function(){
     //console.log("hello");
     document.getElementById('total').innerHTML = convertB(parseInt(localStorage.getItem('total')));
 })
+createInfoDevice();

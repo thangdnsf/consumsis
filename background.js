@@ -54,7 +54,7 @@ headersReceivedListener = (details) => {
     
     storeData(domain, requestSize,type);
 
-    console.log(details);
+    //console.log(details);
     return {};
 };
 

@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded',function(){
         data: {
             labels: labels,
             datasets: [{
-                label: 'My First dataset',
+                label: 'Consumption chart',
                 backgroundColor: [
                     window.chartColors.red,
                     window.chartColors.orange,
@@ -114,6 +114,10 @@ document.addEventListener('DOMContentLoaded',function(){
         options: {
             //rotation: 1 * Math.PI,
             //circumference: 1 * Math.PI,
+            responsive: true,
+				legend: {
+					position: 'bottom',
+				},
             tooltips: {
                 callbacks: {
                   title: function(tooltipItem, data) {
@@ -140,25 +144,57 @@ document.addEventListener('DOMContentLoaded',function(){
               ctx = chart.chart.ctx;
       
           ctx.restore();
-          var fontSize = (height / 200).toFixed(2);
+          bytes = parseInt(localStorage.getItem('total'));
+          var fontSize = (height / 220).toFixed(2);
+          ctx.textAlign = "center";
           ctx.font = fontSize + "em sans-serif";
           ctx.textBaseline = "middle";
+          
+          var text = convertKWh(bytes),
+              //textX = Math.round((width - ctx.measureText(text).width) / 2),
+              textY = height / 2 - 60;
 
-          bytes = parseInt(localStorage.getItem('total'));
-          var text = convertB(bytes),
-              textX = Math.round((width - ctx.measureText(text).width) / 2),
-              textY = height / 2;
-              textkwh = parseInt(localStorage.getItem('total')),
-       
-          ctx.fillText(text, textX, textY);
-          ctx.fillText(convertKWh(bytes),textX,textY+40)
-          ctx.fillText((device.GHG*computeKWh(bytes)).toFixed(3).toString()+" kgCO2e",textX-20,textY+80)
+          ctx.fillStyle = window.chartColors.blue;
+          
+          ctx.fillText(text,width/2,textY-10);
+
+          //
+          var text1 = convertB(bytes),
+            //textX1 = Math.round((width - ctx.measureText(text).width) / 2)-11,
+            textY1 = height / 2 - 60;
+          
+          fontSize = (height / 150).toFixed(2);
+          ctx.font = fontSize + "em sans-serif";
+
+          ctx.fillStyle = window.chartColors.red;
+          ctx.fillText(text1, width/2, textY1+20);
+
+          //
+          var text2 = (device.GHG*computeKWh(bytes)).toFixed(3).toString()+" kgCO2e",
+          //textX2 = Math.round((width - ctx.measureText(text).width) / 2),
+          textY2 = height / 2 - 60;
+          
+          fontSize = (height / 220).toFixed(2);
+          ctx.font = fontSize + "em sans-serif";
+          ctx.fillStyle = window.chartColors.green;
+          ctx.fillText(text2,width/2,textY2+50);
           ctx.save();
         }
       });
     
     //console.log("hello");
-    document.getElementById('total').innerHTML = convertB(parseInt(localStorage.getItem('total')));
+    //document.getElementById('total').innerHTML = convertB(parseInt(localStorage.getItem('total')));
 })
 createInfoDevice();
 //hi Pratvi
+
+
+
+  // Or with jQuery
+
+
+
+
+  $(document).ready(function(){
+    $('.tabs').tabs();
+  });

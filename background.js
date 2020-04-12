@@ -70,6 +70,9 @@ storeData = (domain, requestSize,types) => {
     localStorage.setItem('totalghg', JSON.stringify(totalghg));
 
     chrome.browserAction.setBadgeText({"text":convertB(total)});
+    chrome.browserAction.setTitle({
+        title:convertB(total)
+    });
 
     //sent msg to popup
     //var views = chrome.extension.getViews({

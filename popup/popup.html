@@ -13,6 +13,7 @@
         <script src="materialize/js/materialize.min.js"></script>
         <script src="materialize/js/materialize.js"></script>
         <script src="popup.js"></script>
+        <script src="consumption.js"></script>
         
     </head>
     <body style="width: 360px;">
@@ -27,6 +28,7 @@
             <li class="tab"><a class="active" href="#test4">Home</a></li>
             <li class="tab"><a href="#test5">Metaphors</a></li>
             <li class="tab"><a href="#test6">Monitor</a></li>
+            <li class="tab"><a href="#test7">Setting</a></li>
             </ul>
         </div>
         <div class="card-content grey lighten-5" style="height: 100%;">
@@ -43,63 +45,78 @@
             </div>
             <div id="test5">
                 <div class="row">
-                    <div class="col s7">
+                    <div class="col s6">
                       <!-- Promo Content 1 goes here -->
                       <p>
                         <i class="small material-icons" style="color: #0771cd;">airplanemode_active</i>
-                        <span style="font-size: 20px;color: rgb(7, 113, 205);">5000</span>
-                        <span style="font-size: 10px;color: rgb(7, 113, 205);">km</span>
+                        <span id="plane" style="font-size: 20px;color: rgb(7, 113, 205);">0</span>
+                        <span id="planedv" style="font-size: 10px;color: rgb(7, 113, 205);">m</span>
                       </p>
-                      <p>bhdbkvbdjkbv</p>
+                      <p>Airbus 380 with 516 passengers</p>
                     </div>
-                    <div class="col s5">
+                    <div class="col s6">
                       <!-- Promo Content 2 goes here -->
-                      <i class=" small material-icons" style="color: rgb(199, 43, 98);">computer</i>
-                      <span style="font-size: 20px;color: rgb(199, 43, 98);">5000</span>
-                      <span style="font-size: 10px;color: rgb(199, 43, 98);">km</span>
-                      <p>bhdbkvbdjkbv</p>
+                      <i class=" small material-icons" style="color: rgb(199, 43, 98);">cake</i>
+                      <span id="cake" style="font-size: 20px;color: rgb(199, 43, 98);">0</span>
+                      <span id="cakedv" style="font-size: 10px;color: rgb(199, 43, 98);">times</span>
+                      <p>Light a birthday cake</p>
                     </div>
                 </div>
                 
                 <div class="row">
-                    <div class="col s7">
+                    <div class="col s6">
                         <!-- Promo Content 3 goes here -->
                         <i class=" small material-icons" style="color: rgb(142, 142, 142);">directions_bike</i>
-                        <p>bhdbkvbdjkbv</p>
+                        <span id="cycling" style="font-size: 20px;color: rgb(142, 142, 142);">0</span>
+                        <span id="cyclingdv" style="font-size: 10px;color: rgb(142, 142, 142);">m</span>
+                        <p>Cycling</p>
                     </div>
-                    <div class="col s5">
+                    <div class="col s6">
                         <!-- Promo Content 3 goes here -->
                         <i class=" small material-icons" style="color: rgb(240, 68, 68);">directions_car</i>
-                        <p>bhdbkvbdjkbv</p>
+                        <span id="car" style="font-size: 20px;color: rgb(240, 68, 68);">0</span>
+                        <span id="cardv" style="font-size: 10px;color: rgb(240, 68, 68);">m</span>
+                        <p>Toyota Avensis, 2.0 VVT-i Tourer</p>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col s7">
+                    <div class="col s6">
                         <!-- Promo Content 3 goes here -->
-                        <i class=" small material-icons" style="color: rgb(31, 77, 228);">directions_run</i>
-                        <p>bhdbkvbdjkbv</p>
+                        <i class=" small material-icons" style="color: rgb(31, 77, 228);">directions_walk</i>
+                        <span id="walking" style="font-size: 20px;color: rgb(31, 77, 228);">0</span>
+                        <span id="walkingdv" style="font-size: 10px;color: rgb(31, 77, 228);">m</span>
+                        <p>Walking</p>
                     </div>
-                    <div class="col s5">
+                    <div class="col s6">
                         <!-- Promo Content 3 goes here -->
                         <i class=" small material-icons" style="color: rgb(77, 75, 75);">euro_symbol</i>
-                        <p>bhdbkvbdjkbv</p>
+                        <span id="money" style="font-size: 20px;color: rgb(77, 75, 75);">0</span>
+                        <span style="font-size: 10px;color: rgb(77, 75, 75);"></span>
+                        <p >Spent in France</p>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col s7">
+                    <div class="col s6">
                         <!-- Promo Content 3 goes here -->
                         <i class=" small material-icons" style="color: green;">battery_charging_full</i>
-                        <p>bhdbkvbdjkbv</p>
+                        <span id="battery" style="font-size: 20px;color: green">0</span>
+                        <span style="font-size: 10px;color: green">times</span>
+                        <p >Charge for iPhone 11 Pro Max</p>
                     </div>
-                    <div class="col s5">
+                    <div class="col s6">
                         <!-- Promo Content 3 goes here -->
                         <i class=" small material-icons" style="color: rgb(227, 227, 8);">wb_incandescent</i>
-                        <p>bhdbkvbdjkbv</p>
+                        <span id="light" style="font-size: 20px;color: rgb(227, 227, 8);">0</span>
+                        <span id="lightdv"style="font-size: 10px;color: rgb(227, 227, 8);">hours</span>
+                        <p>Philips 23W - CFL light</p>
                     </div>
                 </div>
             </div>
             <div id="test6">
+                <p>Coming soon</p>
+            </div>
+            <div id="test7">
                 
             </div>
         </div>

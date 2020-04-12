@@ -9,8 +9,8 @@ const co2percandy = 0.0106;//8.13 grams/candy * 5 *8.13/352*1100 = 127g/hours ~ 
 class consumption {
     constructor() {
         this.bytes = parseInt(localStorage.getItem('total'));
-        this.kwh = parseInt(localStorage.getItem('totalkwh'));
-        this.ghg = parseInt(localStorage.getItem('totalghg'));
+        this.kwh = parseFloat(localStorage.getItem('totalkwh'));
+        this.ghg = parseFloat(localStorage.getItem('totalghg'));
     }
     get getBytesString(){
         if (this.bytes*1e-6 < 1)
@@ -26,6 +26,8 @@ class consumption {
     }
 
     get getGHGString(){
+        if(this.ghg < 0.1)
+            return (this.ghg*1000).toFixed(0).toString()+" gCO2e";
         return this.ghg.toFixed(2).toString()+" kgCO2e";
     }
     get getbatteryString(){
@@ -114,3 +116,25 @@ getTopDomain = ()=>{
         result.push({key:"other",val: sum});}
     return result;
 }
+
+createInfoDevice = () => {
+    $.getJSON('http://www.geoplugin.net/json.gp', function(data) {
+        var obj = new Object();
+        obj.IP = data['geoplugin_request'];
+        obj.country =  data["geoplugin_countryName"];
+        if (data["geoplugin_continentName"] === "Europe"){
+            if (obj.country === "France")
+                obj.GHG = 0.035;
+            else{
+                obj.GHG = 0.276;
+            }
+        }
+        else if (obj.country === "United States")
+            obj.GHG = 0.493;
+        else if (obj.country === "China")
+            obj.GHG = 0.681;
+        else 
+            obj.GHG = 0.519;
+        localStorage.setItem('device', JSON.stringify(obj));
+    });
+};

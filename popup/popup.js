@@ -3,6 +3,11 @@
 document.addEventListener('DOMContentLoaded',function(){
     //get information of device user
     var device = JSON.parse(localStorage.getItem('device'));
+    if (device === null)
+    {
+        createInfoDevice();
+        device = JSON.parse(localStorage.getItem('device'));
+    }
     document.getElementById('ip').innerHTML = device.IP;
     document.getElementById('ctr').innerHTML = device.country;
     // init var consumption
@@ -69,7 +74,7 @@ document.addEventListener('DOMContentLoaded',function(){
     Chart.pluginService.register({
         beforeDraw: function(chart) {
           var width = chart.chart.width,
-              height = chart.chart.height,
+              height = chart.chart.width + 80,
               ctx = chart.chart.ctx;
       
           ctx.restore();
@@ -149,4 +154,12 @@ updateInfoDevice();
 // enable tab navigation with jQuery
 $(document).ready(function(){
     $('.tabs').tabs();
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var link = document.getElementById('refresh');
+    // onClick's logic below:
+    link.addEventListener('click', function() {
+        localStorage.clear();
+    });
 });

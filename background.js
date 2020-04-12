@@ -50,12 +50,12 @@ storeData = (domain, requestSize,types) => {
         device = JSON.parse(localStorage.getItem('device'));
     }
         
-
+    
     const mbvalueJson = null === mbvalue ? {} : JSON.parse(mbvalue);
     var total = null === _total ? 0 : parseInt(_total);
-    var totalkwh = null === _totalkwh ? 0 : parseInt(_totalkwh);
-    var totalghg = null === _totalghg ? 0 : parseInt(_totalghg);
-
+    var totalkwh = null === _totalkwh ? 0 : parseFloat(_totalkwh);
+    var totalghg = null === _totalghg ? 0 : parseFloat(_totalghg);
+    
     let bytePerDomain = undefined === mbvalueJson[domain] ? 0 : parseInt(mbvalueJson[domain]);
     
     mbvalueJson[domain] = bytePerDomain + requestSize;

@@ -79,13 +79,13 @@ document.addEventListener('DOMContentLoaded',function(){
       
           ctx.restore();
           
-          var fontSize = (height / 220).toFixed(2);
+          var fontSize = (width / 220).toFixed(2);
           ctx.textAlign = "center";
           ctx.font = fontSize + "em sans-serif";
           ctx.textBaseline = "middle";
           
           var text = consum.getkwhString,
-              textY = height / 2 - 70;
+              textY = height / 2 - 80;
 
           ctx.fillStyle = window.chartColors.blue;
           
@@ -94,9 +94,9 @@ document.addEventListener('DOMContentLoaded',function(){
           //
           var text1 = consum.getBytesString,
             
-            textY1 = height / 2 - 70;
+            textY1 = height / 2 - 80;
           
-          fontSize = (height / 150).toFixed(2);
+          fontSize = (width / 150).toFixed(2);
           ctx.font = fontSize + "em sans-serif";
 
           ctx.fillStyle = window.chartColors.red;
@@ -104,9 +104,9 @@ document.addEventListener('DOMContentLoaded',function(){
 
           //
           var text2 = consum.getGHGString,
-          textY2 = height / 2 - 70;
+          textY2 = height / 2 - 80;
           
-          fontSize = (height / 220).toFixed(2);
+          fontSize = (width / 220).toFixed(2);
           ctx.font = fontSize + "em sans-serif";
           ctx.fillStyle = window.chartColors.green;
           ctx.fillText(text2,width/2,textY2+50);

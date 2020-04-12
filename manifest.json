@@ -12,6 +12,7 @@
     "tabs",
     "webRequest",
     "webRequestBlocking",
+    "notifications",
     "<all_urls>"
   ],
   "background": {

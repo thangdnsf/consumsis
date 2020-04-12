@@ -26,7 +26,7 @@ createInfoDevice = () => {
         localStorage.setItem('device', JSON.stringify(obj));
     });
 };
-
+var pushnoti = 10;// 10gb -> 20gb -> ...
 const kWhPerByteDataCenter = 7.20e-11;
 const kWhPerByteNetwork = 1.52e-10;
 convertB = (bytes) => {
@@ -73,6 +73,18 @@ storeData = (domain, requestSize,types) => {
     chrome.browserAction.setTitle({
         title:convertB(total)
     });
+
+    if (total*1e-9 > pushnoti){
+        chrome.notifications.create('', {
+            title: 'Your reached '+pushnoti+' GB',
+            message: 'Reduce web surfing to save the earth',
+            iconUrl: 'icon/icon128.png',
+            type: 'basic'
+          });
+        console.log("noti",pushnoti);
+        pushnoti= parseInt((total*1e-9)/10)*10+10;
+        console.log("noti",pushnoti);
+    }
 
     //sent msg to popup
     //var views = chrome.extension.getViews({

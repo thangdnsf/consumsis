@@ -76,7 +76,7 @@ storeData = (domain, requestSize,types) => {
 
     if (total*1e-9 > pushnoti){
         chrome.notifications.create('', {
-            title: 'Your reached '+pushnoti+' GB',
+            title: 'You spent '+pushnoti+' GB',
             message: 'Reduce web surfing to save the earth',
             iconUrl: 'icon/icon128.png',
             type: 'basic'

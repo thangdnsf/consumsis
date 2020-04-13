@@ -6,4 +6,4 @@
 ## Images
 ![imgs/home.jpg](imgs/home.jpg)
 ![imgs/home.jpg](imgs/metaphore.jpg)
-![imgs/home.jpg](imgs/noti.jpg)
+![imgs/home.jpg](imgs/notifi.jpg)

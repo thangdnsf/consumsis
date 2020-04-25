@@ -37,25 +37,63 @@ convertB = (bytes) => {
     else
         return (bytes*1e-9).toFixed(2).toString() + " GB"
 }
-storeData = (domain, requestSize,types) => {
-    var today = new Date();
+
+var device = null;
+var mbvalueJson = null ;
+var total = 0;
+var totalkwh =0;
+var totalghg = 0;
+var mbvaluedayJson = null;
+var mbvaluemonthJson = null;
+var mbvalueyearJson = null;
+setStorage = ()=>{
+    localStorage.setItem('mbperdomain', JSON.stringify(mbvalueJson));
+    localStorage.setItem('total', JSON.stringify(total));
+    localStorage.setItem('totalkwh', JSON.stringify(totalkwh));
+    localStorage.setItem('totalghg', JSON.stringify(totalghg));
+
+    localStorage.setItem('mbperhour', JSON.stringify(mbvaluehourJson));
+    localStorage.setItem('mbperday', JSON.stringify(mbvaluedayJson));
+    localStorage.setItem('mbpermonth', JSON.stringify(mbvaluemonthJson));
+    localStorage.setItem('mbperyear', JSON.stringify(mbvalueyearJson));
+}
+getStorage = ()=>{
     const mbvalue = localStorage.getItem('mbperdomain');
     const _total = localStorage.getItem('total');
     const _totalkwh = localStorage.getItem('totalkwh');
     const _totalghg = localStorage.getItem('totalghg');
-    var device = JSON.parse(localStorage.getItem('device'));
+    device = JSON.parse(localStorage.getItem('device'));
+    mbvalueJson = null === mbvalue ? {} : JSON.parse(mbvalue);
+    total = null === _total ? 0 : parseInt(_total);
+    totalkwh = null === _totalkwh ? 0 : parseFloat(_totalkwh);
+    totalghg = null === _totalghg ? 0 : parseFloat(_totalghg);
+
     if (device === null)
     {
         createInfoDevice();
         device = JSON.parse(localStorage.getItem('device'));
     }
-        
-    
-    const mbvalueJson = null === mbvalue ? {} : JSON.parse(mbvalue);
-    var total = null === _total ? 0 : parseInt(_total);
-    var totalkwh = null === _totalkwh ? 0 : parseFloat(_totalkwh);
-    var totalghg = null === _totalghg ? 0 : parseFloat(_totalghg);
-    
+
+    const mbperhour = localStorage.getItem('mbperhour');
+    const mbperday = localStorage.getItem('mbperday');
+    const mbpermonth = localStorage.getItem('mbpermonth');
+    const mbperyear = localStorage.getItem('mbperyear');
+
+    mbvaluehourJson = null === mbperhour ? {} : JSON.parse(mbperhour);
+    mbvaluedayJson = null === mbperday ? {} : JSON.parse(mbperday);
+    mbvaluemonthJson = null === mbpermonth ? {} : JSON.parse(mbpermonth);
+    mbvalueyearJson = null === mbperyear ? {} : JSON.parse(mbperyear);
+}
+getStorage();
+var time = 1;
+storeData = (domain, requestSize,types) => {
+
+    if (device === null)
+    {
+        createInfoDevice();
+        device = JSON.parse(localStorage.getItem('device'));
+    }
+
     let bytePerDomain = undefined === mbvalueJson[domain] ? 0 : parseInt(mbvalueJson[domain]);
     
     mbvalueJson[domain] = bytePerDomain + requestSize;
@@ -64,11 +102,7 @@ storeData = (domain, requestSize,types) => {
     
     totalkwh += kwh;
     totalghg += kwh * device.GHG;
-    localStorage.setItem('mbperdomain', JSON.stringify(mbvalueJson));
-    localStorage.setItem('total', JSON.stringify(total));
-    localStorage.setItem('totalkwh', JSON.stringify(totalkwh));
-    localStorage.setItem('totalghg', JSON.stringify(totalghg));
-
+    
     chrome.browserAction.setBadgeText({"text":convertB(total)});
     chrome.browserAction.setTitle({
         title:convertB(total)
@@ -81,9 +115,9 @@ storeData = (domain, requestSize,types) => {
             iconUrl: 'icon/icon128.png',
             type: 'basic'
           });
-        console.log("noti",pushnoti);
+        //console.log("noti",pushnoti);
         pushnoti= parseInt((total*1e-9)/10)*10+10;
-        console.log("noti",pushnoti);
+        //console.log("noti",pushnoti);
     }
 
     //sent msg to popup
@@ -93,6 +127,41 @@ storeData = (domain, requestSize,types) => {
     //for (var i = 0; i < views.length; i++) {
     //    views[i].document.getElementById('total').innerHTML = convertB(total);
     //}
+
+    //save data folow by day month year
+    const date = new Date(); 
+    const hour = date.getHours();
+    const day = date.getDate();
+    const month = date.getMonth()+1;
+    const year = date.getFullYear();
+
+    let bytePerhour = undefined === mbvaluehourJson[hour] ? 0 : parseInt(mbvaluehourJson[hour][1]);
+    if (undefined === mbvaluehourJson[hour])
+        mbvaluehourJson[hour] = [];
+    mbvaluehourJson[hour][0] = hour.toString();
+    mbvaluehourJson[hour][1] = bytePerhour + requestSize;
+
+    let bytePerday = undefined === mbvaluedayJson[day] ? 0 : parseInt(mbvaluedayJson[day][1]);
+    if (undefined === mbvaluedayJson[day])
+        mbvaluedayJson[day] = [];
+    mbvaluedayJson[day][0] = day.toString()+'/'+month.toString()+'/'+year.toString();
+    mbvaluedayJson[day][1] = bytePerday + requestSize;
+    
+    let bytePermonth = undefined === mbvaluemonthJson[month] ? 0 : parseInt(mbvaluemonthJson[month][1]);
+    if (undefined === mbvaluemonthJson[month])
+        mbvaluemonthJson[month] = [];
+    mbvaluemonthJson[month][0] = month.toString()+'/'+year.toString();
+    mbvaluemonthJson[month][1] = bytePermonth + requestSize;
+    
+    let bytePeryear = undefined === mbvalueyearJson[year] ? 0 : parseInt(mbvalueyearJson[year]);
+    mbvalueyearJson[year] = bytePeryear + requestSize;
+
+    //10 times -> save to localStoage
+    if(time % 100 == 0){
+        setStorage();
+        time = 1;
+    }else 
+        time++;
 };
 
 

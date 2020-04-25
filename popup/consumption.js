@@ -8,9 +8,11 @@ const wattsperlignt = 23;//Philips 23W - CFL light
 const co2percandy = 0.0106;//8.13 grams/candy * 5 *8.13/352*1100 = 127g/hours ~ 10.6g/5 ms
 class consumption {
     constructor() {
-        this.bytes = parseInt(localStorage.getItem('total'));
-        this.kwh = parseFloat(localStorage.getItem('totalkwh'));
-        this.ghg = parseFloat(localStorage.getItem('totalghg'));
+        var bg = chrome.extension.getBackgroundPage();
+        this.bytes = bg.total;//parseInt(localStorage.getItem('total'));
+        this.kwh = bg.totalkwh;//parseFloat(localStorage.getItem('totalkwh'));
+        this.ghg = bg.totalghg;//parseFloat(localStorage.getItem('totalghg'));
+        
     }
     get getBytesString(){
         if (this.bytes*1e-6 < 1)
@@ -37,6 +39,7 @@ class consumption {
         return (this.kwh*kwhpereuro).toFixed(1).toString();
     }
     get getplanekmString(){
+        console.log(this.bytes,this.kwh,this.ghg)
         const d = this.ghg/co2perplanekm; //km
         if(d < 1)
             return [(d*1000).toFixed(2).toString(),"m"];
@@ -94,7 +97,8 @@ convertB = (bytes) => {
         return (bytes*1e-9).toFixed(2).toString() + " GB"
 }
 getTopDomain = ()=>{
-    var data = JSON.parse(localStorage.getItem('mbperdomain'))
+    var bg = chrome.extension.getBackgroundPage();
+    var data = bg.mbvalueJson;//JSON.parse(localStorage.getItem('mbperdomain'))
     
     var arr = [];
 
@@ -136,5 +140,64 @@ createInfoDevice = () => {
         else 
             obj.GHG = 0.519;
         localStorage.setItem('device', JSON.stringify(obj));
+        this.bg.device = obj;
     });
 };
+
+getnumofmonth = (month,year) => {
+    switch(month){
+        case 1:case 3:case 5:case 7:case 8:case 10:case 12:
+            return 31;
+        case 4: case 6: case 9: case 11:
+            return 30;
+        case 2:
+            if((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)
+                return 29;
+            else
+                return 28;
+    }
+}
+
+getbyhour = ()=>{
+    var bg = chrome.extension.getBackgroundPage();
+    var mbbyhour = bg.mbvaluehourJson;
+
+    const date = new Date(); 
+    const hour = date.getHours();
+
+    var data = [];
+    var data_id = [];
+
+    for (let i = 22-hour; i >= 0; i--){
+        data.push((mbbyhour[23-i] === undefined ? 0: parseInt((mbbyhour[23-i][1])*1e-9*10)/10));
+        data_id.push((23-i).toString()+':00');
+    }
+    for (let i = 0; i <= hour; i++){
+        data.push((mbbyhour[i]=== undefined ? 0:parseInt((mbbyhour[i][1])*1e-9*10)/10));
+        data_id.push(i.toString()+':00');
+    }
+    return [data_id,data];
+}
+
+getbyday = ()=>{
+    var bg = chrome.extension.getBackgroundPage();
+    var mbbyday = bg.mbvaluedayJson;
+
+    const date = new Date(); 
+    const day = date.getDate();
+    const month = date.getMonth()+1;
+    const year = date.getFullYear();
+
+    var data = [];
+    var data_id = [];
+    const nblastmonth = getnumofmonth(month - 1 <= 0?12:month-1, year);
+    for (let i = 27-day; i >= 0; i--){
+        data.push((mbbyday[nblastmonth-i] === undefined ? 0: parseInt((mbbyday[nblastmonth-i][1])*1e-9*10)/10));
+        data_id.push((nblastmonth-i).toString()+'/'+(month-1).toString()+'/'+year.toString().slice(2,4));
+    }
+    for (let i = 1; i <= day; i++){
+        data.push((mbbyday[i]=== undefined ? 0:parseInt((mbbyday[i][1])*1e-9*10)/10));
+        data_id.push(i.toString()+'/'+month.toString()+'/'+year.toString().slice(2,4));
+    }
+    return [data_id,data];
+}

@@ -1,6 +1,8 @@
 //import consumption from './consumption';
 
 document.addEventListener('DOMContentLoaded',function(){
+    
+
     //get information of device user
     var device = JSON.parse(localStorage.getItem('device'));
     if (device === null)
@@ -21,57 +23,7 @@ document.addEventListener('DOMContentLoaded',function(){
         data.push(list[a].val);
         labels.push(list[a].key);
     }
-    var ctx = document.getElementById('myChart').getContext('2d');
-    
-    var chart = new Chart(ctx, {
-        // The type of chart we want to create
-        type: 'doughnut',
-        
-        // The data for our dataset
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Consumption chart',
-                backgroundColor: [
-                    window.chartColors.red,
-                    window.chartColors.orange,
-                    window.chartColors.yellow,
-                    window.chartColors.green,
-                    window.chartColors.blue,
-                    window.chartColors.purple
-                  ],
-                borderColor: 'rgb(255, 255, 255)',
-                data: data
-            }]
-        },
-
-        // Configuration options go here
-        options: {
-            //rotation: 1 * Math.PI,
-            //circumference: 1 * Math.PI,
-            responsive: true,
-				legend: {
-					position: 'bottom',
-				},
-            tooltips: {
-                callbacks: {
-                  title: function(tooltipItem, data) {
-                    return data['labels'][tooltipItem[0]['index']];
-                  },
-                  label: function(tooltipItem, data) {
-                    return convertB(data['datasets'][0]['data'][tooltipItem['index']]);
-                  },
-                  afterLabel: function(tooltipItem, data) {
-                    var dataset = data['datasets'][0];
-                    var percent = Math.round((dataset['data'][tooltipItem['index']] / dataset["_meta"][0]['total']) * 100)
-                    return '(' + percent + '%)';
-                  }
-                }
-            }
-        }
-    });
-
-    Chart.pluginService.register({
+    var doughnutCenterText ={
         beforeDraw: function(chart) {
           var width = chart.chart.width,
               height = chart.chart.width + 80,
@@ -112,7 +64,58 @@ document.addEventListener('DOMContentLoaded',function(){
           ctx.fillText(text2,width/2,textY2+50);
           ctx.save();
         }
-      });
+      };
+    var ctx = document.getElementById('myChart').getContext('2d');
+    
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'doughnut',
+        
+        // The data for our dataset
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Consumption chart',
+                backgroundColor: [
+                    window.chartColors.red,
+                    window.chartColors.orange,
+                    window.chartColors.yellow,
+                    window.chartColors.green,
+                    window.chartColors.blue,
+                    window.chartColors.purple
+                  ],
+                borderColor: 'rgb(255, 255, 255)',
+                data: data
+            }]
+        },
+        plugins: [doughnutCenterText],
+        // Configuration options go here
+        options: {
+            //rotation: 1 * Math.PI,
+            //circumference: 1 * Math.PI,
+            responsive: true,
+				legend: {
+					position: 'bottom',
+				},
+            tooltips: {
+                callbacks: {
+                  title: function(tooltipItem, data) {
+                    return data['labels'][tooltipItem[0]['index']];
+                  },
+                  label: function(tooltipItem, data) {
+                    return convertB(data['datasets'][0]['data'][tooltipItem['index']]);
+                  },
+                  afterLabel: function(tooltipItem, data) {
+                    var dataset = data['datasets'][0];
+                    var percent = Math.round((dataset['data'][tooltipItem['index']] / dataset["_meta"][0]['total']) * 100)
+                    return '(' + percent + '%)';
+                  }
+                }
+            }
+        }
+    });
+
+    
     //document.getElementById('total').innerHTML = convertB(parseInt(localStorage.getItem('total')));
     //load metaphores
     document.getElementById('battery').innerHTML = consum.getbatteryString;
@@ -124,6 +127,28 @@ document.addEventListener('DOMContentLoaded',function(){
     [document.getElementById('cycling').innerHTML,document.getElementById('cyclingdv').innerHTML] = consum.getcyclingkmString;
     [document.getElementById('walking').innerHTML,document.getElementById('walkingdv').innerHTML] = consum.getwalkingkmString;
     [document.getElementById('light').innerHTML,document.getElementById('lightdv').innerHTML] = consum.getlightString;
+
+    //tab3
+    const [lable_day,data_day] = getbyhour();
+    var tk = document.getElementById('tk').getContext('2d');
+    
+    var chart = new Chart(tk, {
+        // The type of chart we want to create
+        type: 'line',
+        
+        // The data for our dataset
+        data: {
+            labels: lable_day,
+            datasets: [{
+                label: "Capacity utilization(GB)",
+                data: data_day,
+                fill: true,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)'
+            }]
+        }
+    });
+
 })
 
 updateInfoDevice = () => {

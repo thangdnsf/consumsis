@@ -29,11 +29,11 @@ class consumption {
 
     get getGHGString(){
         if(this.ghg < 0.1)
-            return (this.ghg*1000).toFixed(0).toString()+" gCO2e";
-        return this.ghg.toFixed(2).toString()+" kgCO2e";
+            return (this.ghg*1000).toFixed(0).toString()+" gCO2";
+        return this.ghg.toFixed(2).toString()+" kgCO2";
     }
     get getbatteryString(){
-        return (this.kwh/kwhperbattery).toFixed(1).toString();
+        return (this.kwh/kwhperbattery).toFixed(0).toString();
     }
     get getmoneyString(){
         return (this.kwh*kwhpereuro).toFixed(1).toString();
@@ -198,6 +198,42 @@ getbyday = ()=>{
     for (let i = 1; i <= day; i++){
         data.push((mbbyday[i]=== undefined ? 0:parseInt((mbbyday[i][1])*1e-9*10)/10));
         data_id.push(i.toString()+'/'+month.toString()+'/'+year.toString().slice(2,4));
+    }
+    return [data_id,data];
+}
+
+getbymonth = ()=>{
+    var bg = chrome.extension.getBackgroundPage();
+    var mbbymonth = bg.mbvaluemonthJson;
+
+    const date = new Date(); 
+    const month = date.getMonth()+1;
+    const year = date.getFullYear();
+
+    var data = [];
+    var data_id = [];
+    
+    for (let i = 11-month; i >= 0; i--){
+        data.push((mbbymonth[12-i] === undefined ? 0: parseInt((mbbymonth[12-i][1])*1e-9*10)/10));
+        data_id.push((12-i).toString()+'/'+(year-1).toString().slice(2,4));
+    }
+    for (let i = 1; i <= month; i++){
+        data.push((mbbymonth[i]=== undefined ? 0:parseInt((mbbymonth[i][1])*1e-9*10)/10));
+        data_id.push(i.toString()+'/'+year.toString().slice(2,4));
+    }
+    return [data_id,data];
+}
+
+getbyyear = ()=>{
+    var bg = chrome.extension.getBackgroundPage();
+    var mbbyyear = bg.mbvalueyearJson;
+
+    var data = [];
+    var data_id = [];
+
+    for (var key in mbbyyear) {
+        data.push(parseInt((mbbyyear[key])*1e-9*10)/10);
+        data_id.push(key);
     }
     return [data_id,data];
 }

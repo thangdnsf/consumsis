@@ -115,9 +115,7 @@ storeData = (domain, requestSize,types) => {
             iconUrl: 'icon/icon128.png',
             type: 'basic'
           });
-        //console.log("noti",pushnoti);
         pushnoti= parseInt((total*1e-9)/10)*10+10;
-        //console.log("noti",pushnoti);
     }
 
     //sent msg to popup
@@ -172,10 +170,10 @@ headersReceivedListener = (details) => {
     const type = details.responseHeaders.find(element => element.name.toLowerCase() === "content-type");
     const size = undefined === content ? {value: 0} : content;
     const requestSize = parseInt(size.value, 10);
-    if (requestSize != 0.0)
+    if (requestSize != 0.0){
         storeData(domain, requestSize,type);
-
-    //console.log(details);
+        //console.log( convertB(requestSize),details);
+    }
     return {};
 };
 

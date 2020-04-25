@@ -4,7 +4,7 @@ start = () => {
 
 start();
 
-(function(){
+/*(function(){
   'use strict';
 
   if (document.readyState === 'complete') {
@@ -23,4 +23,4 @@ start();
       }
     }, 0);
   }
-})();
+})();*/

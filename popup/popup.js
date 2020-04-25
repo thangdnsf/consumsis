@@ -1,4 +1,5 @@
 //import consumption from './consumption';
+var chart = null;
 
 document.addEventListener('DOMContentLoaded',function(){
     
@@ -67,7 +68,7 @@ document.addEventListener('DOMContentLoaded',function(){
       };
     var ctx = document.getElementById('myChart').getContext('2d');
     
-    var chart = new Chart(ctx, {
+    var chartcicle = new Chart(ctx, {
         // The type of chart we want to create
         type: 'doughnut',
         
@@ -78,10 +79,10 @@ document.addEventListener('DOMContentLoaded',function(){
                 label: 'Consumption chart',
                 backgroundColor: [
                     window.chartColors.red,
-                    window.chartColors.orange,
+                    window.chartColors.blue,
                     window.chartColors.yellow,
                     window.chartColors.green,
-                    window.chartColors.blue,
+                    window.chartColors.orange,
                     window.chartColors.purple
                   ],
                 borderColor: 'rgb(255, 255, 255)',
@@ -132,7 +133,7 @@ document.addEventListener('DOMContentLoaded',function(){
     const [lable_day,data_day] = getbyhour();
     var tk = document.getElementById('tk').getContext('2d');
     
-    var chart = new Chart(tk, {
+    chart = new Chart(tk, {
         // The type of chart we want to create
         type: 'line',
         
@@ -186,5 +187,118 @@ document.addEventListener('DOMContentLoaded', function() {
     // onClick's logic below:
     link.addEventListener('click', function() {
         localStorage.clear();
+    });
+    var btday = document.getElementById("btday");
+    var btmonth = document.getElementById("btmonth");
+    var btyear = document.getElementById("btyear");
+    var btyears = document.getElementById("btyears");
+    btday.addEventListener('click', function() {
+        if( btday.className != "btn-small"){
+            btday.className = "btn-small";
+            btmonth.className = "btn-flat";
+            btyear.className = "btn-flat";
+            btyears.className = "btn-flat";
+            const [lable_day,data_day] = getbyhour();
+            var tk = document.getElementById('tk').getContext('2d');
+            chart.destroy();
+            chart = new Chart(tk, {
+                // The type of chart we want to create
+                type: 'line',
+                
+                // The data for our dataset
+                data: {
+                    labels: lable_day,
+                    datasets: [{
+                        label: "Capacity utilization(GB)",
+                        data: data_day,
+                        fill: true,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)'
+                    }]
+                }
+            });
+        }
+    });
+    btmonth.addEventListener('click', function() {
+        if( btmonth.className != "btn-small"){
+            btday.className = "btn-flat";
+            btmonth.className = "btn-small";
+            btyear.className = "btn-flat";
+            btyears.className = "btn-flat";
+            const [lable_day,data_day] = getbyday();
+            var tk = document.getElementById('tk').getContext('2d');
+            chart.destroy();
+            chart = new Chart(tk, {
+                // The type of chart we want to create
+                type: 'line',
+                
+                // The data for our dataset
+                data: {
+                    labels: lable_day,
+                    datasets: [{
+                        label: "Capacity utilization(GB)",
+                        data: data_day,
+                        fill: true,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)'
+                    }]
+                }
+            });
+        }
+    });
+    btyear.addEventListener('click', function() {
+        if( btyear.className != "btn-small"){
+            btday.className = "btn-flat";
+            btmonth.className = "btn-flat";
+            btyear.className = "btn-small";
+            btyears.className = "btn-flat";
+            const [lable_day,data_day] = getbymonth();
+            var tk = document.getElementById('tk').getContext('2d');
+            chart.destroy();
+            chart = new Chart(tk, {
+                // The type of chart we want to create
+                type: 'line',
+                
+                // The data for our dataset
+                data: {
+                    labels: lable_day,
+                    datasets: [{
+                        label: "Capacity utilization(GB)",
+                        data: data_day,
+                        fill: true,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)'
+                    }]
+                }
+            });
+        }
+    });
+    btyears.addEventListener('click', function() {
+        
+        if( btyears.className != "btn-small"){
+            btday.className = "btn-flat";
+            btmonth.className = "btn-flat";
+            btyear.className = "btn-flat";
+            btyears.className = "btn-small";
+            const [lable_day,data_day] = getbyyear();
+            var tk = document.getElementById('tk').getContext('2d');
+            chart.destroy();
+            chart = new Chart(tk, {
+                // The type of chart we want to create
+                type: 'line',
+                
+                // The data for our dataset
+                data: {
+                    labels: lable_day,
+                    datasets: [{
+                        label: "Capacity utilization(GB)",
+                        data: data_day,
+                        fill: true,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)'
+                    }]
+                }
+            });
+        }
     });
 });

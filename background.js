@@ -1,3 +1,15 @@
+if (localStorage.getItem('status') == null)
+{
+    localStorage.setItem('status',JSON.stringify(1)) 
+}
+var status = localStorage.getItem('status');//0 - off; 1 -- on
+
+var levelColors = {
+	0: 'rgb(75, 192, 192)',//green
+    1: 'rgb(255, 205, 86)',//yellow
+    2: 'rgb(255, 159, 64)',//orange
+    3: 'rgb(255, 99, 132)'//red
+};
 getDomain = (url) => {
     let domain = url.indexOf("//") > -1 ? url.split('/')[2] : url.split('/')[0];
     domain = domain.split(':')[0];
@@ -85,7 +97,14 @@ getStorage = ()=>{
     mbvalueyearJson = null === mbperyear ? {} : JSON.parse(mbperyear);
 }
 getStorage();
+if(status == "0")
+{
+    chrome.browserAction.setBadgeText({"text":"off"});
+}else{
+    chrome.browserAction.setBadgeText({"text":convertB(total)});
+}
 var time = 1;
+var lev = 0;
 storeData = (domain, requestSize,types) => {
 
     if (device === null)
@@ -104,8 +123,26 @@ storeData = (domain, requestSize,types) => {
     totalghg += kwh * device.GHG;
     
     chrome.browserAction.setBadgeText({"text":convertB(total)});
+    
+    //set lever color
+    const today = new Date().getDate();
+    const temp = mbvaluedayJson[today]==null?0:mbvaluedayJson[today][1]*1e-9;
+    
+    if (temp<20){
+        chrome.browserAction.setBadgeBackgroundColor({ color: levelColors[0]});
+        lev = 0;
+    }else if (temp<40){
+        chrome.browserAction.setBadgeBackgroundColor({ color: levelColors[1]});
+        lev = 1;
+    }else if (temp<60){
+        chrome.browserAction.setBadgeBackgroundColor({ color: levelColors[2]});
+        lev = 2;
+    }else{
+        chrome.browserAction.setBadgeBackgroundColor({ color: levelColors[3]});
+        lev = 3;
+    }
     chrome.browserAction.setTitle({
-        title:convertB(total)
+        title:"You spent "+convertB(total)+"(Level:"+lev.toString()+")."
     });
 
     if (total*1e-9 > pushnoti){
@@ -158,19 +195,22 @@ storeData = (domain, requestSize,types) => {
     if(time % 100 == 0){
         setStorage();
         time = 1;
+        device = JSON.parse(localStorage.getItem('device'));
     }else 
         time++;
 };
 
 
 headersReceivedListener = (details) => {
-    
+    status = localStorage.getItem('status');//0 - off; 1 -- on
+    if(status=="0") return {}
     const domain = getDomain(!details.initiator ? details.url : details.initiator);
     const content = details.responseHeaders.find(element => element.name.toLowerCase() === "content-length");
     const type = details.responseHeaders.find(element => element.name.toLowerCase() === "content-type");
     const size = undefined === content ? {value: 0} : content;
     const requestSize = parseInt(size.value, 10);
-    if (requestSize != 0.0){
+    
+    if (requestSize != 0.0 && domain.split('.').length > 1){
         storeData(domain, requestSize,type);
         //console.log( convertB(requestSize),details);
     }
@@ -189,5 +229,5 @@ handleMessage = (request, sender, sendResponse) => {
 //localStorage.removeItem('total')
 
 chrome.runtime.onMessage.addListener(handleMessage);
-chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 255] });
+chrome.browserAction.setBadgeBackgroundColor({ color: window.levelColors[0] });
 

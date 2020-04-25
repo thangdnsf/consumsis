@@ -8,11 +8,21 @@ const wattsperlignt = 23;//Philips 23W - CFL light
 const co2percandy = 0.0106;//8.13 grams/candy * 5 *8.13/352*1100 = 127g/hours ~ 10.6g/5 ms
 class consumption {
     constructor() {
+        createInfoDevice();
         var bg = chrome.extension.getBackgroundPage();
         this.bytes = bg.total;//parseInt(localStorage.getItem('total'));
         this.kwh = bg.totalkwh;//parseFloat(localStorage.getItem('totalkwh'));
         this.ghg = bg.totalghg;//parseFloat(localStorage.getItem('totalghg'));
-        
+        this.device = bg.device;
+    }
+    get getIP(){
+        return this.device == null ? "unknown":this.device.IP;
+    }
+    get getCountry(){
+        return this.device == null ? "unknown":this.device.country;
+    }
+    get getGHG(){
+        return this.device == null ? "unknown":this.device.GHG;
     }
     get getBytesString(){
         if (this.bytes*1e-6 < 1)
@@ -122,6 +132,7 @@ getTopDomain = ()=>{
 }
 
 createInfoDevice = () => {
+    var bg = chrome.extension.getBackgroundPage();
     $.getJSON('http://www.geoplugin.net/json.gp', function(data) {
         var obj = new Object();
         obj.IP = data['geoplugin_request'];
@@ -140,7 +151,7 @@ createInfoDevice = () => {
         else 
             obj.GHG = 0.519;
         localStorage.setItem('device', JSON.stringify(obj));
-        this.bg.device = obj;
+        bg.device = obj;
     });
 };
 
@@ -192,11 +203,11 @@ getbyday = ()=>{
     var data_id = [];
     const nblastmonth = getnumofmonth(month - 1 <= 0?12:month-1, year);
     for (let i = 27-day; i >= 0; i--){
-        data.push((mbbyday[nblastmonth-i] === undefined ? 0: parseInt((mbbyday[nblastmonth-i][1])*1e-9*10)/10));
+        data.push((mbbyday[nblastmonth-i] === undefined ? 0: parseInt((mbbyday[nblastmonth-i][1])*1e-9*100)/100));
         data_id.push((nblastmonth-i).toString()+'/'+(month-1).toString()+'/'+year.toString().slice(2,4));
     }
     for (let i = 1; i <= day; i++){
-        data.push((mbbyday[i]=== undefined ? 0:parseInt((mbbyday[i][1])*1e-9*10)/10));
+        data.push((mbbyday[i]=== undefined ? 0:parseInt((mbbyday[i][1])*1e-9*100)/100));
         data_id.push(i.toString()+'/'+month.toString()+'/'+year.toString().slice(2,4));
     }
     return [data_id,data];
@@ -214,11 +225,11 @@ getbymonth = ()=>{
     var data_id = [];
     
     for (let i = 11-month; i >= 0; i--){
-        data.push((mbbymonth[12-i] === undefined ? 0: parseInt((mbbymonth[12-i][1])*1e-9*10)/10));
+        data.push((mbbymonth[12-i] === undefined ? 0: parseInt((mbbymonth[12-i][1])*1e-9*100)/100));
         data_id.push((12-i).toString()+'/'+(year-1).toString().slice(2,4));
     }
     for (let i = 1; i <= month; i++){
-        data.push((mbbymonth[i]=== undefined ? 0:parseInt((mbbymonth[i][1])*1e-9*10)/10));
+        data.push((mbbymonth[i]=== undefined ? 0:parseInt((mbbymonth[i][1])*1e-9*100)/100));
         data_id.push(i.toString()+'/'+year.toString().slice(2,4));
     }
     return [data_id,data];
@@ -232,7 +243,7 @@ getbyyear = ()=>{
     var data_id = [];
 
     for (var key in mbbyyear) {
-        data.push(parseInt((mbbyyear[key])*1e-9*10)/10);
+        data.push(parseInt((mbbyyear[key])*1e-9*100)/100);
         data_id.push(key);
     }
     return [data_id,data];

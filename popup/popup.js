@@ -1,21 +1,15 @@
 //import consumption from './consumption';
 var chart = null;
-
+var bg = chrome.extension.getBackgroundPage();
+document.getElementById('html').style.backgroundColor = bg.levelColors[bg.lev];
+// init var consumption
+var consum = null ;
 document.addEventListener('DOMContentLoaded',function(){
-    
-
-    //get information of device user
-    var device = JSON.parse(localStorage.getItem('device'));
-    if (device === null)
-    {
-        createInfoDevice();
-        device = JSON.parse(localStorage.getItem('device'));
-    }
-    document.getElementById('ip').innerHTML = device.IP;
-    document.getElementById('ctr').innerHTML = device.country;
     // init var consumption
-    var consum = new consumption() ;
-
+    consum = new consumption() ;
+    document.getElementById('ip').innerHTML = consum.getIP;
+    document.getElementById('ctr').innerHTML = consum.getCountry;
+    document.getElementById('ghg').innerHTML = consum.getGHG;
     // draw chart
     var list = getTopDomain();
     var data =[];
@@ -149,7 +143,21 @@ document.addEventListener('DOMContentLoaded',function(){
             }]
         }
     });
-
+    //tab 4
+    var status = localStorage.getItem('status');
+    if (status == 1)
+    {
+        localStorage.setItem('status',JSON.stringify(1))
+        btstatus.style.backgroundColor = "green";
+        btstatus.innerHTML = "on";
+        chrome.browserAction.setBadgeText({"text":consum.getBytesString});
+    }
+    else{
+        localStorage.setItem('status',JSON.stringify(0))
+        btstatus.style.backgroundColor = "gray";
+        btstatus.innerHTML = "off";
+        chrome.browserAction.setBadgeText({"text":"off"});
+    }
 })
 
 updateInfoDevice = () => {
@@ -183,10 +191,40 @@ $(document).ready(function(){
 });
 
 document.addEventListener('DOMContentLoaded', function() {
+    var btstatus  = document.getElementById('btstatus');
+    var status = localStorage.getItem('status');
+    btstatus.addEventListener('click', function() {
+        if (status == 0)
+        {
+            status = 1;
+            localStorage.setItem('status',JSON.stringify(1))
+            btstatus.style.backgroundColor = "green";
+            btstatus.innerHTML = "on";chrome.browserAction.setBadgeText({"text":consum.getBytesString});
+        }
+        else{
+            localStorage.setItem('status',JSON.stringify(0))
+            btstatus.style.backgroundColor = "gray";
+            btstatus.innerHTML = "off";
+            chrome.browserAction.setBadgeText({"text":"off"});
+        }
+    });
     var link = document.getElementById('refresh');
     // onClick's logic below:
     link.addEventListener('click', function() {
         localStorage.clear();
+        bg.device = {"IP":"unknown","country":"unknown","GHG":0};
+        bg.mbvalueJson = {} ;
+        bg.total = 0;
+        bg.totalkwh =0;
+        bg.totalghg = 0;
+        bg.mbvaluedayJson = {};
+        bg.mbvaluemonthJson = {};
+        bg.mbvalueyearJson = {};
+        chrome.browserAction.setBadgeText({"text":""});
+        chrome.browserAction.setTitle({
+            title:""
+        });
+        location.reload();
     });
     var btday = document.getElementById("btday");
     var btmonth = document.getElementById("btmonth");

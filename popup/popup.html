@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html id="html">
     <head>
         <script src="Chart.js/Chart.min.js"></script>
         <script src="Chart.js/Chart.bundle.min.js"></script>
@@ -7,7 +7,7 @@
         <script src="../jquery-3.4.1.min.js"></script>
         
         <link rel="stylesheet" href="materialize/css/materialize.min.css">
-        <link rel="stylesheet" href="materialize/css/materialize.css">
+        <!--<link rel="stylesheet" href="materialize/css/materialize.css">-->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <!-- Compiled and minified JavaScript -->
         <script src="materialize/js/materialize.min.js"></script>
@@ -37,11 +37,7 @@
                     <h5 style="color: rgb(201, 203, 207);">Consumption chart</h5>
                 </center>
                 <canvas id="myChart" width="320" height="360"></canvas>
-                
-                <p style="margin-top: 7px;"><span class="material-icons" style="display:inline;color: rgb(75, 192, 192);">my_location</span> <span style="color: rgb(75, 192, 192);font-size: 18px;margin: 10px;" id="ip"></span>
-                <span class="material-icons" style="margin-left: 15px;display:inline;color: rgb(255, 99, 132);">location_on</span> <span style="color: rgb(255, 99, 132);font-size: 18px;margin: 10px;" id="ctr"></span></p>
 
-                
             </div>
             <div id="test5">
                 <div class="row">
@@ -115,17 +111,27 @@
             </div>
             <div id="test6">
                 <center style="margin-top: -30px;margin-bottom: 20px;"">
-                    <h5 style="color: rgb(201, 203, 207);">Statitics</h5>
-                    <canvas id="tk" width="320" height="360"></canvas>
+                    <!--<h5 style="color: rgb(201, 203, 207);">Statitics</h5>-->
                     <br>
                     <input class="btn-small" id="btday" style="font-size: 10px;" type="submit" value="day">
                     <input class="btn-flat" id="btmonth" style="font-size: 10px;" type="button" value="month">
                     <input class="btn-flat" id="btyear" style="font-size: 10px;" type="submit" value="year">
                     <input class="btn-flat" id="btyears" style="font-size: 10px;" type="submit" value="years">
+                    <canvas id="tk" width="320" height="360"></canvas>
                 </center>
             </div>
             <div id="test7">
-                
+                <ul style="width: 100%; font-size: 15px;" class="collection">
+                    <li class="collection-item"><span class="badge" id="ip">1</span>Your IP address</li>
+                    <li class="collection-item"><span class="badge" id="ctr">4</span>Your location</li>
+                    <li class="collection-item"><span class="badge" id="ghg">4</span>Your GHG</li>
+                    <li class="collection-item"><span class="badge" id="btstatus" style="background-color: gray;color: #ffff;font-size: 15px;"  id="ghg">on</span>Status</li>
+                    <li class="collection-item"><span class="badge"><a id="refresh" style="width: 50px ;margin-top: -8px;vertical-align: top; float: right;" class="btn-flat"><i class="material-icons left">refresh</i></a></span>Reset</li>
+                    </ul>
+                <!--<h6 style="display: inline;">Your location: </h6>
+                <p style="margin-top: 7px;"><span class="material-icons" style="display:inline;color: rgb(75, 192, 192);">my_location</span> <span style="color: rgb(75, 192, 192);font-size: 18px;margin: 10px;" id="ip"></span>
+                <span class="material-icons" style="margin-left: 15px;display:inline;color: rgb(255, 99, 132);">location_on</span> <span style="color: rgb(255, 99, 132);font-size: 18px;margin: 10px;" id="ctr"></span></p>
+                <br>
                 <div class="switch" style="margin-bottom: 50px;">
                     <h6 style="display: inline;">The plugin is</h6>
                     <label style="display: inline; vertical-align: middle; float: right;">
@@ -136,7 +142,7 @@
                     </label>
                 </div>
                 <h6 style="display: inline;">Do you want to clean data?</h6>
-                <a id="refresh" style="margin-top: -8px;vertical-align: top; float: right;" class="btn-small"><i class="material-icons left">refresh</i>clean</a>
+                <a id="refresh" style="margin-top: -8px;vertical-align: top; float: right;" class="btn-small"><i class="material-icons left">refresh</i>clean</a>-->
             </div>
         </div>
         </div>

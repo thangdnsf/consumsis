@@ -69,6 +69,8 @@ setStorage = ()=>{
     localStorage.setItem('mbpermonth', JSON.stringify(mbvaluemonthJson));
     localStorage.setItem('mbperyear', JSON.stringify(mbvalueyearJson));
 }
+var time = 1;
+var lev = 0;
 getStorage = ()=>{
     const mbvalue = localStorage.getItem('mbperdomain');
     const _total = localStorage.getItem('total');
@@ -95,6 +97,28 @@ getStorage = ()=>{
     mbvaluedayJson = null === mbperday ? {} : JSON.parse(mbperday);
     mbvaluemonthJson = null === mbpermonth ? {} : JSON.parse(mbpermonth);
     mbvalueyearJson = null === mbperyear ? {} : JSON.parse(mbperyear);
+
+    const today = new Date().getDate();
+    const temp = mbvaluedayJson[today]==null?0:mbvaluedayJson[today][1]*1e-9;
+    
+    if (temp<20){
+        chrome.browserAction.setBadgeBackgroundColor({ color: levelColors[0]});
+        lev = 0;
+    }else if (temp<40){
+        chrome.browserAction.setBadgeBackgroundColor({ color: levelColors[1]});
+        lev = 1;
+    }else if (temp<60){
+        chrome.browserAction.setBadgeBackgroundColor({ color: levelColors[2]});
+        lev = 2;
+    }else{
+        chrome.browserAction.setBadgeBackgroundColor({ color: levelColors[3]});
+        lev = 3;
+    }
+    chrome.browserAction.setTitle({
+        title:"You spent "+convertB(total)+"(Level:"+lev.toString()+")."
+    });
+
+    pushnoti= parseInt((total*1e-9)/10)*10+10;
 }
 getStorage();
 if(status == "0")
@@ -103,8 +127,7 @@ if(status == "0")
 }else{
     chrome.browserAction.setBadgeText({"text":convertB(total)});
 }
-var time = 1;
-var lev = 0;
+
 storeData = (domain, requestSize,types) => {
 
     if (device === null)
@@ -202,6 +225,7 @@ storeData = (domain, requestSize,types) => {
 
 
 headersReceivedListener = (details) => {
+    
     status = localStorage.getItem('status');//0 - off; 1 -- on
     if(status=="0") return {}
     const domain = getDomain(!details.initiator ? details.url : details.initiator);
@@ -218,16 +242,14 @@ headersReceivedListener = (details) => {
 };
 
 handleMessage = (request, sender, sendResponse) => {
+    
     chrome.webRequest.onHeadersReceived.addListener(
         headersReceivedListener,
         {urls: ["<all_urls>"]},
         ["blocking", "responseHeaders"]
     );
+    return;
 };
 
-//localStorage.removeItem('mbvalue')
-//localStorage.removeItem('total')
-
 chrome.runtime.onMessage.addListener(handleMessage);
-chrome.browserAction.setBadgeBackgroundColor({ color: window.levelColors[0] });
-
+chrome.browserAction.setBadgeBackgroundColor({ color: window.levelColors[lev] });

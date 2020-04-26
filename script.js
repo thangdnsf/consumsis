@@ -1,10 +1,11 @@
-start = () => {
+chrome.runtime.sendMessage({ action: 'start' });
+/*start = () => {
   chrome.runtime.sendMessage({ action: 'start' });
 }
 
 start();
 
-/*(function(){
+(function(){
   'use strict';
 
   if (document.readyState === 'complete') {

@@ -1,5 +1,5 @@
 # Consumsis plugin for chrome browser
-### Version: [alpha] v1.0.0
+### Version: [beta] v2.0.0
 ### Authors: Thang Nguyen and Pratvi
 ### Email: thangdn.tlu@gmail.com
 

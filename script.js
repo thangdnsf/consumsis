@@ -1,27 +1,12 @@
-chrome.runtime.sendMessage({ action: 'start' });
-/*start = () => {
-  chrome.runtime.sendMessage({ action: 'start' });
-}
-
-start();
-
-(function(){
-  'use strict';
-
-  if (document.readyState === 'complete') {
-    startCollect();
-  } else {
-    window.addEventListener('load', startCollect);
+var total=0;
+chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
+  if(message.action == 'data')
+  {
+    total+= parseInt(message.data);
+    //console.log('Got message',total);
+  }else if (message.action == 'getdata')
+  {
+    //console.log(total);
+    chrome.runtime.sendMessage({ action: 'senddata',value: total});
   }
-
-  function startCollect() {
-    setTimeout(function() {
-      const l = performance.getEntriesByType('navigation')[0].toJSON();
-      if (l.duration > 0) {
-        // we have only 4 chars in our disposal including decimal point
-        var t = (l.duration / 1000).toFixed(2);
-        chrome.runtime.sendMessage({time: t, timing: l});
-      }
-    }, 0);
-  }
-})();*/
+});

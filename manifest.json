@@ -14,7 +14,9 @@
     "webRequestBlocking",
     "notifications",
     "<all_urls>",
-    "background"
+    "background",
+    "activeTab",
+    "webNavigation"
   ],
   "background": {
     "scripts": ["jquery-3.4.1.min.js","background.js"],

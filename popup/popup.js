@@ -1,3 +1,4 @@
+//chrome.runtime.sendMessage({ action: 'start' });
 //import consumption from './consumption';
 var chart = null;
 var bg = chrome.extension.getBackgroundPage();
@@ -199,7 +200,8 @@ document.addEventListener('DOMContentLoaded', function() {
             status = 1;
             localStorage.setItem('status',JSON.stringify(1))
             btstatus.style.backgroundColor = "green";
-            btstatus.innerHTML = "on";chrome.browserAction.setBadgeText({"text":consum.getBytesString});
+            btstatus.innerHTML = "on";
+            chrome.browserAction.setBadgeText({"text":consum.getBytesString});
         }
         else{
             localStorage.setItem('status',JSON.stringify(0))
@@ -339,4 +341,52 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+});
+var domain_ = "";
+var levelColors = {
+	0: 'rgb(75, 192, 192)',//green
+    1: 'rgb(255, 205, 86)',//yellow
+    2: 'rgb(255, 159, 64)',//orange
+    3: 'rgb(255, 99, 132)'//red
+};
+convertBv2 = (bytes) => {
+    if (bytes*1e-6 < 0.1)
+        return bytes.toString() + " bytes"
+    else if (bytes*1e-6 < 1000)
+        return (bytes*1e-6).toFixed(2).toString() + " MB"
+    else
+        return (bytes*1e-9).toFixed(2).toString() + " GB"
+}
+chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
+    if(message.action == 'senddata')
+    {
+      console.log('Got message',message.value);
+      const temp = message.value*1e-6;
+      var lev = 0;
+      if (temp<2){//2mb
+            lev = 0;
+        }else if (temp<10){
+            lev = 1;
+        }else if (temp<20){
+            lev = 2;
+        }else{
+            lev = 3;
+        }
+      document.getElementById('currentpage').innerHTML = "<span class=\"badge\"style=\"color: white;font-size: 13px;\">"+convertBv2(message.value)+"(Lv:"+lev+")"+"</span>"+domain_;
+      document.getElementById('currentpage').style.backgroundColor = bg.levelColors[lev];
+      
+    }
+  });
+
+getDomain = (url) => {
+    let domain = url.indexOf("//") > -1 ? url.split('/')[2] : url.split('/')[0];
+    domain = domain.split(':')[0];
+    domain = domain.split('?')[0];
+    domain = domain.replace("www.","");
+    return domain;
+};
+chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+    domain_ = getDomain(tabs[0].url);
+    chrome.tabs.sendMessage(tabs[0].id, {action: "getdata"}, function(response) {});
+    
 });

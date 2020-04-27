@@ -25,19 +25,22 @@
         </div>
         <div class="card-tabs">
             <ul class="tabs tabs-fixed-width tabs-transparent">
-            <li class="tab"><a class="active" href="#test4">Home</a></li>
-            <li class="tab"><a href="#test5">Metaphors</a></li>
-            <li class="tab"><a href="#test6">Monitor</a></li>
-            <li class="tab"><a href="#test7">Setting</a></li>
+                <li class="tab"><a class="active" href="#test4">Home</a></li>
+                <li class="tab"><a href="#test5">Metaphors</a></li>
+                <li class="tab"><a href="#test6">Monitor</a></li>
+                <li class="tab"><a href="#test7">Setting</a></li>
             </ul>
         </div>
         <div class="card-content grey lighten-5" style="height: 100%;">
             <div id="test4">
-                <center style="margin-top: -30px;margin-bottom: 20px;"">
+                <!--<center style="margin-top: -30px;margin-bottom: 20px;"">
                     <h5 style="color: rgb(201, 203, 207);">Consumption chart</h5>
-                </center>
-                <canvas id="myChart" width="320" height="360"></canvas>
-
+                </center>-->
+                <canvas id="myChart" width="320" height="360" style="margin-top: -10px"></canvas>
+                <p style="font-size: 13px; margin-top: 5px;">Consumption level of this page:</p>
+                <ul style="width: 100%; font-size: 13px;" class="collection">
+                    <li class="collection-item" id="currentpage" style="color: white;font-weight: bold;"><span class="badge" id="crvalue">sv</span></li>
+                </ul>
             </div>
             <div id="test5">
                 <div class="row">

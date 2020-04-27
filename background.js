@@ -215,7 +215,8 @@ storeData = (domain, requestSize,types) => {
     mbvalueyearJson[year] = bytePeryear + requestSize;
 
     //10 times -> save to localStoage
-    if(time % 100 == 0){
+    //setStorage();
+    if(time % 10 == 0){
         setStorage();
         time = 1;
         device = JSON.parse(localStorage.getItem('device'));
@@ -231,25 +232,24 @@ headersReceivedListener = (details) => {
     const domain = getDomain(!details.initiator ? details.url : details.initiator);
     const content = details.responseHeaders.find(element => element.name.toLowerCase() === "content-length");
     const type = details.responseHeaders.find(element => element.name.toLowerCase() === "content-type");
+    const tabid = details["tabId"];
     const size = undefined === content ? {value: 0} : content;
     const requestSize = parseInt(size.value, 10);
     
     if (requestSize != 0.0 && domain.split('.').length > 1){
         storeData(domain, requestSize,type);
-        //console.log( convertB(requestSize),details);
+        //console.log( convertB(requestSize),tabid,details);
+        if(tabid > 0)
+            chrome.tabs.sendMessage(parseInt(tabid), {action: "data",data: requestSize,domain: domain}, function(response) {});
+        
     }
     return {};
 };
 
-handleMessage = (request, sender, sendResponse) => {
-    
-    chrome.webRequest.onHeadersReceived.addListener(
-        headersReceivedListener,
-        {urls: ["<all_urls>"]},
-        ["blocking", "responseHeaders"]
-    );
-    return;
-};
+chrome.webRequest.onHeadersReceived.addListener(
+    headersReceivedListener,
+    {urls: ["<all_urls>"]},
+    ["blocking", "responseHeaders"]
+);
 
-chrome.runtime.onMessage.addListener(handleMessage);
 chrome.browserAction.setBadgeBackgroundColor({ color: window.levelColors[lev] });

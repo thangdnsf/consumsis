@@ -151,13 +151,13 @@ document.addEventListener('DOMContentLoaded',function(){
         localStorage.setItem('status',JSON.stringify(1))
         btstatus.style.backgroundColor = "green";
         btstatus.innerHTML = "on";
-        chrome.browserAction.setBadgeText({"text":consum.getBytesString});
+        //chrome.browserAction.setBadgeText({"text":consum.getBytesString});
     }
     else{
         localStorage.setItem('status',JSON.stringify(0))
         btstatus.style.backgroundColor = "gray";
         btstatus.innerHTML = "off";
-        chrome.browserAction.setBadgeText({"text":"off"});
+        //chrome.browserAction.setBadgeText({"text":"off"});
     }
 })
 
@@ -201,13 +201,15 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.setItem('status',JSON.stringify(1))
             btstatus.style.backgroundColor = "green";
             btstatus.innerHTML = "on";
-            chrome.browserAction.setBadgeText({"text":consum.getBytesString});
+            chrome.browserAction.setBadgeText({"text":""});//consum.getBytesString});
+            chrome.browserAction.setIcon({path: '../icon/lv0.png'})
         }
         else{
             localStorage.setItem('status',JSON.stringify(0))
             btstatus.style.backgroundColor = "gray";
             btstatus.innerHTML = "off";
-            chrome.browserAction.setBadgeText({"text":"off"});
+            //chrome.browserAction.setBadgeText({"text":"off"});
+            chrome.browserAction.setIcon({path: '../icon/off.png'})
         }
     });
     var link = document.getElementById('refresh');
@@ -222,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
         bg.mbvaluedayJson = {};
         bg.mbvaluemonthJson = {};
         bg.mbvalueyearJson = {};
-        chrome.browserAction.setBadgeText({"text":""});
+        //chrome.browserAction.setBadgeText({"text":""});
         chrome.browserAction.setTitle({
             title:""
         });
@@ -360,7 +362,7 @@ convertBv2 = (bytes) => {
 chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
     if(message.action == 'senddata')
     {
-      console.log('Got message',message.value);
+      //console.log('Got message',message.value);
       const temp = message.value*1e-6;
       var lev = 0;
       if (temp<2){//2mb

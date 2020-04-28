@@ -114,18 +114,20 @@ getStorage = ()=>{
         chrome.browserAction.setBadgeBackgroundColor({ color: levelColors[3]});
         lev = 3;
     }
-    chrome.browserAction.setTitle({
-        title:"You spent "+convertB(total)+"(Level:"+lev.toString()+")."
-    });
+    //chrome.browserAction.setTitle({
+    //    title:"You spent "+convertB(total)+"(Level:"+lev.toString()+")."
+    //});
 
     pushnoti= parseInt((total*1e-9)/10)*10+10;
 }
 getStorage();
 if(status == "0")
 {
-    chrome.browserAction.setBadgeText({"text":"off"});
+    //chrome.browserAction.setBadgeText({"text":"off"});
+    chrome.browserAction.setIcon({path: 'icon/off.png'})
 }else{
-    chrome.browserAction.setBadgeText({"text":convertB(total)});
+    //chrome.browserAction.setBadgeText({"text":convertB(total)});
+    chrome.browserAction.setIcon({path: 'icon/lv0.png'})
 }
 
 storeData = (domain, requestSize,types) => {
@@ -145,7 +147,7 @@ storeData = (domain, requestSize,types) => {
     totalkwh += kwh;
     totalghg += kwh * device.GHG;
     
-    chrome.browserAction.setBadgeText({"text":convertB(total)});
+    //chrome.browserAction.setBadgeText({"text":convertB(total)});
     
     //set lever color
     const today = new Date().getDate();
@@ -164,9 +166,9 @@ storeData = (domain, requestSize,types) => {
         chrome.browserAction.setBadgeBackgroundColor({ color: levelColors[3]});
         lev = 3;
     }
-    chrome.browserAction.setTitle({
-        title:"You spent "+convertB(total)+"(Level:"+lev.toString()+")."
-    });
+    //chrome.browserAction.setTitle({
+    //    title:"You spent "+convertB(total)+"(Level:"+lev.toString()+")."
+    //});
 
     if (total*1e-9 > pushnoti){
         chrome.notifications.create('', {
@@ -240,7 +242,7 @@ headersReceivedListener = (details) => {
         storeData(domain, requestSize,type);
         //console.log( convertB(requestSize),tabid,details);
         if(tabid > 0)
-            chrome.tabs.sendMessage(parseInt(tabid), {action: "data",data: requestSize,domain: domain}, function(response) {});
+            chrome.tabs.sendMessage(parseInt(tabid), {action: "data",data: requestSize,domain: domain,tabid:tabid}, function(response) {});
         
     }
     return {};
@@ -253,3 +255,22 @@ chrome.webRequest.onHeadersReceived.addListener(
 );
 
 chrome.browserAction.setBadgeBackgroundColor({ color: window.levelColors[lev] });
+
+
+chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) 
+{
+  if(msg.action == "senddata2bgtochangeicon") {
+    var tabId = msg.tabid;
+    const temp = msg.value*1e-6;
+    
+    if (temp<2){//2mb
+        chrome.browserAction.setIcon({path: 'icon/lv0.png', tabId: tabId});
+    }else if (temp<10){
+        chrome.browserAction.setIcon({path: 'icon/lv1.png', tabId: tabId});
+    }else if (temp<20){
+        chrome.browserAction.setIcon({path: 'icon/lv2.png', tabId: tabId});
+    }else{
+        chrome.browserAction.setIcon({path: 'icon/lv3.png', tabId: tabId});
+    }
+  }
+});

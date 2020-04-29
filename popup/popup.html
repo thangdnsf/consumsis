@@ -17,8 +17,8 @@
         
     </head>
     <body style="width: 360px;">
-
-        <div class="card blue">
+        
+        <div class="card blue" style="position: relative;height: 490px;">
         <div class="card-content white-text" style="height: 60px;margin-top: -10px">
             <i class="small material-icons" style="color:#ffff;display: inline;">multiline_chart</i>
             <h5 style="margin-left: 5px;display: inline;">Consumsis</h5>
@@ -33,14 +33,14 @@
         </div>
         <div class="card-content grey lighten-5" style="height: 100%;">
             <div id="test4">
-                <!--<center style="margin-top: -30px;margin-bottom: 20px;"">
+                <center style="margin-top: -30px;margin-bottom: 20px;"">
                     <h5 style="color: rgb(201, 203, 207);">Consumption chart</h5>
-                </center>-->
+                </center>
                 <canvas id="myChart" width="320" height="360" style="margin-top: -10px"></canvas>
-                <p style="font-size: 13px; margin-top: 5px;">Consumption level of current page:</p>
+                <!--<p style="font-size: 13px; margin-top: 5px;">Consumption level of current page:</p>
                 <ul style="width: 100%; font-size: 13px;" class="collection">
                     <li class="collection-item" id="currentpage" style="color: white;font-weight: bold;"><span class="badge" id="crvalue"></span></li>
-                </ul>
+                </ul>-->
             </div>
             <div id="test5">
                 <div class="row">
@@ -142,6 +142,28 @@
                 </center>
             </div>
         </div>
+        <div id="tabpage" style="position:absolute;width: 100%; height: 99%;top: 0;left: 0;visibility:hidden">
+            <div class="card" style="width: 100%; height: 99%;margin-top: 78px;">
+                <div class="card-content">
+                <span id="currentpage_m" style="font-size: 20px;" class="card-title activator grey-text text-darken-4">Uknow<i id="closatb_m" class="material-icons right">close</i></span>
+                <p id = "title_m"></p>
+                <center>
+                    <img id="stamp_m" style="margin-top: 20px;width: 100px;" src="../icon/lv0.png">
+                    <p style="background-color: red; margin: 5px 60px; color: #ffff; font-size: 20px;" id="label_">light consumption</p>
+                
+                <ul style="width: 60%; font-size: 13px;" class="collection">
+                    <li class="collection-item"><span class="badge" id="mb_m">50 MB</span>Size</li>
+                    <li class="collection-item"><span class="badge" id="co2_m">1gCO2e</span>GHG</li>
+                    <li class="collection-item"><span class="badge" id="kw_m">0.5kwh</span>Electrical</li>
+                </ul>
+                <i id="gotoplugin" class="material-icons center" style="font-size: 30px; color: white;background-color: rgb(75, 192, 192);height: 30px;width: 100px;">navigate_next</i>
+                </center>
+                
+                </div>
+                
+            </div>
         </div>
+        
+    </div>
     </body>
 </html>

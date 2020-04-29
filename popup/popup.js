@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded',function(){
           ctx.font = fontSize + "em sans-serif";
 
           ctx.fillStyle = window.chartColors.red;
-          ctx.fillText(text1, width/2, textY1+20);
+          ctx.fillText(text1, width/2, textY1+15);
 
           //
           var text2 = consum.getGHGString,
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded',function(){
           fontSize = (width / 220).toFixed(2);
           ctx.font = fontSize + "em sans-serif";
           ctx.fillStyle = window.chartColors.green;
-          ctx.fillText(text2,width/2,textY2+50);
+          ctx.fillText(text2,width/2,textY2+35);
           ctx.save();
         }
       };
@@ -345,11 +345,19 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 var domain_ = "";
+var icon_ = "";
+var title_ = "";
 var levelColors = {
 	0: 'rgb(75, 192, 192)',//green
     1: 'rgb(255, 205, 86)',//yellow
     2: 'rgb(255, 159, 64)',//orange
     3: 'rgb(255, 99, 132)'//red
+};
+var levelstrings = {
+	0: 'light',
+    1: 'medium',
+    2: 'heavy',
+    3: 'very heavy'
 };
 convertBv2 = (bytes) => {
     if (bytes*1e-6 < 0.1)
@@ -359,10 +367,27 @@ convertBv2 = (bytes) => {
     else
         return (bytes*1e-9).toFixed(2).toString() + " GB"
 }
+convertghgv2 = (value) => {
+    if(value < 0.0001)
+        return (value*1000*1000).toFixed(0).toString()+" mgCO2e";
+    if(value < 0.1)
+        return (value*1000).toFixed(0).toString()+" gCO2e";
+    return value.toFixed(2).toString()+" kgCO2e";
+}
+convertkwhv2 = (value) =>{
+    if(value < 0.0001)
+        return (value*3.6*1e6).toFixed(2).toString()+" Wh";
+    return value.toFixed(2).toString()+" kWh";
+}
+const kWhPerByteDataCenter = 7.20e-11;
+const kWhPerByteNetwork = 1.52e-10;
 chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
     if(message.action == 'senddata')
     {
       //console.log('Got message',message.value);
+      const mb = message.value;
+      const kwh =mb * (kWhPerByteDataCenter+kWhPerByteNetwork);
+      const ghg = kwh*bg.device.GHG;
       const temp = message.value*1e-6;
       var lev = 0;
       if (temp<2){//2mb
@@ -374,9 +399,26 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
         }else{
             lev = 3;
         }
-      document.getElementById('currentpage').innerHTML = "<span class=\"badge\"style=\"color: white;font-size: 13px;\">"+convertBv2(message.value)+"(Lv:"+lev+")"+"</span>"+domain_;
-      document.getElementById('currentpage').style.backgroundColor = bg.levelColors[lev];
-      
+      document.getElementById('tabpage').style.visibility = "visible";
+      //document.getElementById('currentpage').innerHTML = "<span class=\"badge\"style=\"color: white;font-size: 13px;\">"+convertBv2(message.value)+"(Lv:"+lev+")"+"</span>"+domain_;
+      //document.getElementById('currentpage').style.backgroundColor = bg.levelColors[lev];
+      const _img = "<img src=\""+icon_+"\" style=\"vertical-align: middle;height: 35px;\"> ";
+      document.getElementById('currentpage_m').innerHTML =_img + domain_ + "<i id=\"closatb_m\" class=\"material-icons right\">close</i>";
+      document.getElementById('title_m').innerHTML =title_;
+      document.getElementById('stamp_m').src ="../icon/lv"+lev.toString()+".png";
+      document.getElementById('mb_m').innerHTML =convertBv2(mb);
+      document.getElementById('co2_m').innerHTML =convertghgv2(ghg);
+      document.getElementById('kw_m').innerHTML =convertkwhv2(kwh);
+      document.getElementById('label_').innerHTML =levelstrings[lev];
+      document.getElementById('label_').style.backgroundColor = bg.levelColors[lev];
+      document.getElementById('gotoplugin').addEventListener('click', function() {
+        document.getElementById('tabpage').style.visibility = "hidden";
+        
+      });
+      document.getElementById('closatb_m').addEventListener('click', function() {
+        document.getElementById('tabpage').style.visibility = "hidden";
+        
+      });
     }
   });
 
@@ -389,6 +431,9 @@ getDomain = (url) => {
 };
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
     domain_ = getDomain(tabs[0].url);
+    icon_ = tabs[0].favIconUrl;
+    title_ = tabs[0].title;
+    console.log(tabs[0]);
     chrome.tabs.sendMessage(tabs[0].id, {action: "getdata"}, function(response) {});
     
 });

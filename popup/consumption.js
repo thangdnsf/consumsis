@@ -39,8 +39,8 @@ class consumption {
 
     get getGHGString(){
         if(this.ghg < 0.1)
-            return (this.ghg*1000).toFixed(0).toString()+" gCO2";
-        return this.ghg.toFixed(2).toString()+" kgCO2";
+            return (this.ghg*1000).toFixed(0).toString()+" gCO2e";
+        return this.ghg.toFixed(2).toString()+" kgCO2e";
     }
     get getbatteryString(){
         return (this.kwh/kwhperbattery).toFixed(0).toString();

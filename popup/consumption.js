@@ -173,18 +173,26 @@ getbyhour = ()=>{
     var bg = chrome.extension.getBackgroundPage();
     var mbbyhour = bg.mbvaluehourJson;
 
-    const date = new Date(); 
+    const date = new Date();
+    const day = date.getDate();
     const hour = date.getHours();
-
+    const yesterday = day - 1;
+    if(day == 1)
+    {   
+        const month = date.getMonth();
+        const year = date.getFullYear();
+        yesterday = getnumofmonth(month - 1 <= 0?12:month-1, year);
+    }
+    
     var data = [];
     var data_id = [];
 
     for (let i = 22-hour; i >= 0; i--){
-        data.push((mbbyhour[23-i] === undefined ? 0: parseInt((mbbyhour[23-i][1])*1e-9*10)/10));
+        data.push((mbbyhour[23-i] === undefined ? 0: parseInt((yesterday==mbbyhour[23-i][0]?mbbyhour[23-i][1]:0)*1e-9*10)/10));
         data_id.push((23-i).toString()+':00');
     }
     for (let i = 0; i <= hour; i++){
-        data.push((mbbyhour[i]=== undefined ? 0:parseInt((mbbyhour[i][1])*1e-9*10)/10));
+        data.push((mbbyhour[i]=== undefined ? 0:parseInt((day==mbbyhour[i][0]?mbbyhour[i][1]:0)*1e-9*10)/10));
         data_id.push(i.toString()+':00');
     }
     return [data_id,data];
@@ -198,16 +206,17 @@ getbyday = ()=>{
     const day = date.getDate();
     const month = date.getMonth()+1;
     const year = date.getFullYear();
-
+    const d = month.toString()+'/'+year.toString();
+    const l = (month-1).toString()+'/'+year.toString();
     var data = [];
     var data_id = [];
     const nblastmonth = getnumofmonth(month - 1 <= 0?12:month-1, year);
     for (let i = 27-day; i >= 0; i--){
-        data.push((mbbyday[nblastmonth-i] === undefined ? 0: parseInt((mbbyday[nblastmonth-i][1])*1e-9*100)/100));
+        data.push((mbbyday[nblastmonth-i] === undefined ? 0: parseInt((d == mbbyday[nblastmonth-i][0]?mbbyday[nblastmonth-i][1]:0)*1e-9*100)/100));
         data_id.push((nblastmonth-i).toString()+'/'+(month-1).toString()+'/'+year.toString().slice(2,4));
     }
     for (let i = 1; i <= day; i++){
-        data.push((mbbyday[i]=== undefined ? 0:parseInt((mbbyday[i][1])*1e-9*100)/100));
+        data.push((mbbyday[i]=== undefined ? 0:parseInt((d == mbbyday[i][0]?mbbyday[i][1]:0)*1e-9*100)/100));
         data_id.push(i.toString()+'/'+month.toString()+'/'+year.toString().slice(2,4));
     }
     return [data_id,data];

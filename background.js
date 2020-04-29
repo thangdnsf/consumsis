@@ -206,9 +206,9 @@ storeData = (domain, requestSize,types) => {
     let bytePerday = undefined === mbvaluedayJson[day] ? 0 : parseInt(mbvaluedayJson[day][1]);
     if (undefined === mbvaluedayJson[day])
         mbvaluedayJson[day] = [];
-    if(mbvaluedayJson[day][0] != day.toString()+'/'+month.toString()+'/'+year.toString())
+    if(mbvaluedayJson[day][0] != month.toString()+'/'+year.toString())
         bytePerday = 0;
-    mbvaluedayJson[day][0] = day.toString()+'/'+month.toString()+'/'+year.toString();
+    mbvaluedayJson[day][0] = month.toString()+'/'+year.toString();
     mbvaluedayJson[day][1] = bytePerday + requestSize;
     
     let bytePermonth = undefined === mbvaluemonthJson[month] ? 0 : parseInt(mbvaluemonthJson[month][1]);

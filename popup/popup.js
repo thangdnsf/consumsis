@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded',function(){
           fontSize = (width / 220).toFixed(2);
           ctx.font = fontSize + "em sans-serif";
           ctx.fillStyle = window.chartColors.green;
-          ctx.fillText(text2,width/2,textY2+35);
+          ctx.fillText(text2,width/2,textY2+40);
           ctx.save();
         }
       };

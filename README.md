@@ -12,6 +12,8 @@ Consumsis plugin will track and measure data utilization on your browser and sho
 - Show the data (hourly, daily, monthly, even years).
 
 ## Images
+<img src="imgs/img1.png" width="240">
+
 ![imgs/home.jpg](imgs/img1.png){:height="240px"}
 ![imgs/home.jpg](imgs/img2.png =250x)
 ![imgs/home.jpg](imgs/img3.png =250x)

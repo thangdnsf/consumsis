@@ -7,7 +7,7 @@ Consumsis plugin will track and measure data utilization on your browser and sho
 - Data utilization
 - The top websites are the most consumption.
 - The number of data, number of electrical, and number of Carbon dioxide. 
-- Propose some metaphors to easy to understand.
+- Propose some metaphors.
 - Show the current website is light or weight consumption.
 - Show the data (hourly, daily, monthly, even years).
 

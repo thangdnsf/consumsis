@@ -23,4 +23,4 @@ Consumsis plugin will track and measure data utilization on your browser and sho
 <img src="imgs/img9.png" width="260">
 <img src="imgs/img10.png" width="260">
 <img src="imgs/img11.png" width="260">
-![imgs/home.jpg](imgs/notifi.jpg)
+<img src="imgs/notifi.jpg">

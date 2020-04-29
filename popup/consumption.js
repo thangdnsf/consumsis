@@ -192,7 +192,7 @@ getbyhour = ()=>{
         data_id.push((23-i).toString()+':00');
     }
     for (let i = 0; i <= hour; i++){
-        data.push((mbbyhour[i]=== undefined ? 0:parseInt((day==mbbyhour[i][0]?mbbyhour[i][1]:0)*1e-9*10)/10));
+        data.push((mbbyhour[i]=== undefined ? 0:parseInt((day==mbbyhour[i][0]?mbbyhour[i][1]:0)*1e-9*1000)/1000));
         data_id.push(i.toString()+':00');
     }
     return [data_id,data];

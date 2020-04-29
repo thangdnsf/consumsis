@@ -12,17 +12,15 @@ Consumsis plugin will track and measure data utilization on your browser and sho
 - Show the data (hourly, daily, monthly, even years).
 
 ## Images
-<img src="imgs/img1.png" width="240">
-
-![imgs/home.jpg](imgs/img1.png){:height="240px"}
-![imgs/home.jpg](imgs/img2.png =250x)
-![imgs/home.jpg](imgs/img3.png =250x)
-![imgs/home.jpg](imgs/img4.png =250x)
-![imgs/home.jpg](imgs/img5.png)
-![imgs/home.jpg](imgs/img6.png)
-![imgs/home.jpg](imgs/img7.png)
-![imgs/home.jpg](imgs/img8.png)
-![imgs/home.jpg](imgs/img9.png)
-![imgs/home.jpg](imgs/img10.png)
-![imgs/home.jpg](imgs/img11.png)
+<img src="imgs/img1.png" width="260">
+<img src="imgs/img2.png" width="260">
+<img src="imgs/img3.png" width="260">
+<img src="imgs/img4.png" width="260">
+<img src="imgs/img5.png" width="260">
+<img src="imgs/img6.png" width="260">
+<img src="imgs/img7.png" width="260">
+<img src="imgs/img8.png" width="260">
+<img src="imgs/img9.png" width="260">
+<img src="imgs/img10.png" width="260">
+<img src="imgs/img11.png" width="260">
 ![imgs/home.jpg](imgs/notifi.jpg)

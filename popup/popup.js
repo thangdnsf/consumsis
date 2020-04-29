@@ -376,7 +376,7 @@ convertghgv2 = (value) => {
 }
 convertkwhv2 = (value) =>{
     const temp = value*3.6*1e6
-    if(temp < 1e6)
+    if(temp < 1e5)
         return (value*3.6*1e6).toFixed(0).toString()+" Wh";
     return value.toFixed(2).toString()+" kWh";
 }

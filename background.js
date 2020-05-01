@@ -246,7 +246,7 @@ headersReceivedListener = (details) => {
     
     if (requestSize != 0.0 && domain.split('.').length > 1){
         storeData(domain, requestSize,type);
-        //console.log( convertB(requestSize),tabid,details);
+        //console.log( convertB(requestSize),details);
         if(tabid > 0)
             chrome.tabs.sendMessage(parseInt(tabid), {action: "data",data: requestSize,domain: domain,tabid:tabid}, function(response) {});
         

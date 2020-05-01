@@ -176,10 +176,10 @@ getbyhour = ()=>{
     const date = new Date();
     const day = date.getDate();
     const hour = date.getHours();
-    const yesterday = day - 1;
+    var yesterday = day - 1;
     if(day == 1)
     {   
-        const month = date.getMonth();
+        const month = date.getMonth()+1;
         const year = date.getFullYear();
         yesterday = getnumofmonth(month - 1 <= 0?12:month-1, year);
     }

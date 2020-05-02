@@ -368,10 +368,10 @@ convertBv2 = (bytes) => {
         return (bytes*1e-9).toFixed(2).toString() + " GB"
 }
 convertghgv2 = (value) => {
-    if(value < 0.0001)
+    if(value < 0.00001)
         return (value*1000*1000).toFixed(0).toString()+" mgCO2e";
     if(value < 0.1)
-        return (value*1000).toFixed(0).toString()+" gCO2e";
+        return (value*1000).toFixed(2).toString()+" gCO2e";
     return value.toFixed(2).toString()+" kgCO2e";
 }
 convertkwhv2 = (value) =>{

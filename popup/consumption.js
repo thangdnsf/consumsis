@@ -49,7 +49,7 @@ class consumption {
         return (this.kwh*kwhpereuro).toFixed(1).toString();
     }
     get getplanekmString(){
-        console.log(this.bytes,this.kwh,this.ghg)
+        //console.log(this.bytes,this.kwh,this.ghg)
         const d = this.ghg/co2perplanekm; //km
         if(d < 1)
             return [(d*1000).toFixed(2).toString(),"m"];

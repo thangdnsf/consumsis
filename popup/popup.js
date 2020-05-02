@@ -434,7 +434,7 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
     domain_ = getDomain(tabs[0].url);
     icon_ = tabs[0].favIconUrl;
     title_ = tabs[0].title;
-    console.log(tabs[0]);
+    //console.log(tabs[0]);
     chrome.tabs.sendMessage(tabs[0].id, {action: "getdata"}, function(response) {});
     
 });

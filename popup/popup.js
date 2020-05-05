@@ -375,9 +375,9 @@ convertghgv2 = (value) => {
     return value.toFixed(2).toString()+" kgCO2e";
 }
 convertkwhv2 = (value) =>{
-    const temp = value*3.6*1e6
+    const temp = value*1e6
     if(temp < 1e5)
-        return (value*3.6*1e6).toFixed(0).toString()+" Wh";
+        return (value*1e6).toFixed(0).toString()+" Wh";
     return value.toFixed(2).toString()+" kWh";
 }
 const kWhPerByteDataCenter = 7.20e-11;
